@@ -2,11 +2,28 @@
 # Stateful
 
 # 20140111
-# 0.3.1
+# 0.4.0
 
 require 'set'
 
 module Stateful
+
+  class << self
+
+    def extended(klass)
+      klass.extend(Stateful::ClassMethods)
+      klass.send(:include, Stateful::InstanceMethods)
+      if defined?(ActiveRecord::Base) && klass < ActiveRecord::Base
+        require_relative "Stateful/ActiveRecord"
+        klass.send(:include, Stateful::ActiveRecord::InstanceMethods)
+      else
+        require_relative "Stateful/Poro"
+        klass.send(:include, Stateful::Poro::InstanceMethods)
+      end
+    end
+    alias_method :included, :extended
+
+  end # class << self
 
   module ClassMethods
 
