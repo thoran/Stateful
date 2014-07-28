@@ -1,6 +1,6 @@
-# test/ActiveRecord/WithPersistenceNonSpecificExtend.rb
+# test/Poro/WithExplicitNonDeterministicEventOrdering.rb
 
-# 20140616
+# 20140728
 
 gem 'minitest'
 gem 'minitest-spec-context'
@@ -11,27 +11,13 @@ require 'minitest-spec-context'
 lib_dir = File.expand_path(File.join(__FILE__, '..', '..', '..', 'lib'))
 $LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
 
-require 'active_record'
-require 'pg'
 require 'Stateful'
 
-class CreateTableMachines < ActiveRecord::Migration
-
-  def change
-    create_table :active_record_machine0s do |t|
-      t.string :current_state
-    end
-  end
-
-end
-
-class ActiveRecordMachine0 < ActiveRecord::Base
+class PoroMachine7
 
   extend Stateful
 
-  initial_state :initial_state
-
-  state :initial_state do
+  initial_state :initial_state, non_deterministic: true do
     on :an_event => :next_state
     on :another_event => :final_state
   end
@@ -44,28 +30,16 @@ class ActiveRecordMachine0 < ActiveRecord::Base
 
 end
 
-ActiveRecord::Base.establish_connection(
-  adapter: 'postgresql',
-  host: 'localhost',
-  database: 'test'
-)
-unless ActiveRecord::Base.connection.tables.include?('active_record_machine0s')
-  CreateTableMachines.new.change
-end
-if ActiveRecord::Base.connection.tables.include?('active_record_machine0s')
-  ActiveRecordMachine0.delete_all
-end
+describe Stateful::Poro do
 
-describe Stateful::ActiveRecord do
-
-  let(:machine){ActiveRecordMachine0.create}
+  let(:machine){PoroMachine7.new}
 
   it "must have an initial state" do
     machine.initial_state.wont_be_nil
   end
 
   it "must have a final state (if one has been specified)" do
-    if ActiveRecordMachine0.final_state?
+    if PoroMachine7.final_state?
       machine.final_state.wont_be_nil
     end
   end
@@ -76,7 +50,7 @@ describe Stateful::ActiveRecord do
     end
 
     it "must have an initial state consistent with what is given" do
-      machine.initial_state.must_equal ActiveRecordMachine0.stateful_states.initial_state
+      machine.initial_state.must_equal PoroMachine7.stateful_states.initial_state
     end
 
     it "must have an initial state with name as per the name given" do
@@ -88,19 +62,19 @@ describe Stateful::ActiveRecord do
     end
 
     it "must know what it's next state is given an event name" do
-      machine.next_state(:an_event).must_equal ActiveRecordMachine0.stateful_states.find(:next_state)
-      machine.next_state(:another_event).must_equal ActiveRecordMachine0.stateful_states.find(:final_state)
+      machine.next_state(:an_event).must_equal PoroMachine7.stateful_states.find(:next_state)
+      machine.next_state(:another_event).must_equal PoroMachine7.stateful_states.find(:final_state)
     end
 
-    it "must have an intial state which has as set of transitions to other states" do
-      machine.transitions.class.must_equal Array
+    it "must have an intial state which has as set of transitions to other states which is non-deterministic" do
+      machine.transitions.class.must_equal Set
     end
 
     it "must have two transitions to other states" do
       machine.transitions.size.must_equal 2
     end
 
-    it "must know what transitions are available" do
+    it "must know what transitions are available and in what order they are presented" do
       machine.transitions.collect{|t| [t.event_name, t.next_state_name]}.must_equal [[:an_event, :next_state], [:another_event, :final_state]]
     end
 
@@ -154,7 +128,7 @@ describe Stateful::ActiveRecord do
     end
 
     it "must have a final state consistent with what is given" do
-      machine.final_state.must_equal ActiveRecordMachine0.stateful_states.final_state
+      machine.final_state.must_equal PoroMachine7.stateful_states.final_state
     end
 
     it "must have a final state with name as per the name given" do

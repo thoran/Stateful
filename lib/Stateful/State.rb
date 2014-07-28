@@ -10,9 +10,13 @@ module Stateful
     attr_accessor :name
     attr_accessor :transitions
 
-    def initialize(name)
+    def initialize(name, options = {})
       @name = name
-      @transitions = Set.new
+      if options[:non_deterministic] || (options[:deterministic] && !options[:deterministic])
+        @transitions = Set.new
+      else # if options[:deterministic] || !options[:non_deterministic], or no options set, then
+        @transitions = Array.new
+      end
     end
 
     def event(event)

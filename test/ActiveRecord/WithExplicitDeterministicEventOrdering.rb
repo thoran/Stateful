@@ -1,6 +1,6 @@
-# test/ActiveRecord/WithPersistenceNonSpecificExtend.rb
+# test/ActiveRecord/WithExplicitNonDeterministicEventOrdering.rb
 
-# 20140616
+# 20140728
 
 gem 'minitest'
 gem 'minitest-spec-context'
@@ -18,20 +18,18 @@ require 'Stateful'
 class CreateTableMachines < ActiveRecord::Migration
 
   def change
-    create_table :active_record_machine0s do |t|
+    create_table :active_record_machine6s do |t|
       t.string :current_state
     end
   end
 
 end
 
-class ActiveRecordMachine0 < ActiveRecord::Base
+class ActiveRecordMachine6 < ActiveRecord::Base
 
   extend Stateful
 
-  initial_state :initial_state
-
-  state :initial_state do
+  initial_state :initial_state, non_deterministic: true do
     on :an_event => :next_state
     on :another_event => :final_state
   end
@@ -49,23 +47,23 @@ ActiveRecord::Base.establish_connection(
   host: 'localhost',
   database: 'test'
 )
-unless ActiveRecord::Base.connection.tables.include?('active_record_machine0s')
+unless ActiveRecord::Base.connection.tables.include?('active_record_machine6s')
   CreateTableMachines.new.change
 end
-if ActiveRecord::Base.connection.tables.include?('active_record_machine0s')
-  ActiveRecordMachine0.delete_all
+if ActiveRecord::Base.connection.tables.include?('active_record_machine6s')
+  ActiveRecordMachine6.delete_all
 end
 
 describe Stateful::ActiveRecord do
 
-  let(:machine){ActiveRecordMachine0.create}
+  let(:machine){ActiveRecordMachine6.create}
 
   it "must have an initial state" do
     machine.initial_state.wont_be_nil
   end
 
   it "must have a final state (if one has been specified)" do
-    if ActiveRecordMachine0.final_state?
+    if ActiveRecordMachine6.final_state?
       machine.final_state.wont_be_nil
     end
   end
@@ -76,7 +74,7 @@ describe Stateful::ActiveRecord do
     end
 
     it "must have an initial state consistent with what is given" do
-      machine.initial_state.must_equal ActiveRecordMachine0.stateful_states.initial_state
+      machine.initial_state.must_equal ActiveRecordMachine6.stateful_states.initial_state
     end
 
     it "must have an initial state with name as per the name given" do
@@ -88,12 +86,12 @@ describe Stateful::ActiveRecord do
     end
 
     it "must know what it's next state is given an event name" do
-      machine.next_state(:an_event).must_equal ActiveRecordMachine0.stateful_states.find(:next_state)
-      machine.next_state(:another_event).must_equal ActiveRecordMachine0.stateful_states.find(:final_state)
+      machine.next_state(:an_event).must_equal ActiveRecordMachine6.stateful_states.find(:next_state)
+      machine.next_state(:another_event).must_equal ActiveRecordMachine6.stateful_states.find(:final_state)
     end
 
     it "must have an intial state which has as set of transitions to other states" do
-      machine.transitions.class.must_equal Array
+      machine.transitions.class.must_equal Set
     end
 
     it "must have two transitions to other states" do
@@ -154,7 +152,7 @@ describe Stateful::ActiveRecord do
     end
 
     it "must have a final state consistent with what is given" do
-      machine.final_state.must_equal ActiveRecordMachine0.stateful_states.final_state
+      machine.final_state.must_equal ActiveRecordMachine6.stateful_states.final_state
     end
 
     it "must have a final state with name as per the name given" do

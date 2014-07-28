@@ -36,19 +36,24 @@ module Stateful
       !!detect(state)
     end
 
-    def find_or_create(state_name)
+    def find_or_create(state_name, options = {})
       find(state_name) || (
-        state = State.new(state_name)
+        state = State.new(state_name, options)
         all << state
         state
       )
     end
 
-    def initial_state(state_name = nil)
-      if state_name
-        @initial_state = State.new(state_name)
-        all << @initial_state
-        @initial_state
+    def initial_state(state = nil)
+      if state
+        state_name, options = (
+          if state.is_a?(Array)
+            [state.first, state.last]
+          else
+            [state, {}]
+          end
+        )
+        @initial_state = find_or_create(state_name, options)
       else
         @initial_state
       end
@@ -66,8 +71,8 @@ module Stateful
     end
     alias_method :final_state=, :final_state
 
-    def state(state_name, &block)
-      state = find_or_create(state_name)
+    def state(state_name, options = {}, &block)
+      state = find_or_create(state_name, options)
       state.instance_eval(&block) if block
       state.transitions.each do |transition|
         @klass.set_event_method(transition)

@@ -69,7 +69,7 @@ describe Stateful::Poro do
     end
 
     it "must have an intial state which has as set of transitions to other states" do
-      machine.transitions.class.must_equal Set
+      machine.transitions.class.must_equal Array
     end
 
     it "must have two transitions to other states" do
@@ -104,10 +104,10 @@ describe Stateful::Poro do
     end
 
     it "must have a set of transitions to other states" do
-      machine.transitions.class.must_equal Set
+      machine.transitions.class.must_equal Array
     end
 
-    it "must have two transitions to other states" do
+    it "must have one transition to other states" do
       machine.transitions.size.must_equal 1
     end
 
@@ -133,7 +133,7 @@ describe Stateful::Poro do
       machine.final_state.must_equal PoroMachine0.stateful_states.final_state
     end
 
-    it "must have an final state with name as per the name given" do
+    it "must have a final state with name as per the name given" do
       machine.final_state.name.must_equal :final_state
     end
 

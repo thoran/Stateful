@@ -12,15 +12,17 @@ module Stateful
 
     # DSL
 
-    def initial_state(state_name = nil, &block)
+    def initial_state(state_name = nil, options = {}, &block)
       if state_name
-        stateful_states.initial_state = state_name
-        state(state_name, &block) if block
+        stateful_states.initial_state = state_name, options
+        state(state_name, options, &block) if block
       else
         stateful_states.initial_state
       end
     end
 
+    # It doesn't make much sense to specify any options here, such as those pertaining to whether
+    # a transition is deterministic or not, since there are no transitions from a final state.
     def final_state(state_name = nil)
       if state_name
         stateful_states.final_state = state_name
@@ -29,8 +31,8 @@ module Stateful
       end
     end
 
-    def state(state_name, &block)
-      state = stateful_states.find_or_create(state_name)
+    def state(state_name, options = {}, &block)
+      state = stateful_states.find_or_create(state_name, options)
       state.instance_eval(&block) if block
       state.transitions.each do |transition|
         set_event_method(transition)
