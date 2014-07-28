@@ -1,10 +1,10 @@
 # 20140110
 
-require '../lib/Eventful'
+require '../lib/Stateful'
 
 class Machine
 
-  include Eventful
+  extend Stateful
 
   initial_state :state
 

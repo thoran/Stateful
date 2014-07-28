@@ -1,39 +1,39 @@
-# Eventful.rb
-# Eventful
+# Stateful.rb
+# Stateful
 
 # 20140110
-# 0.1.3
+# 0.2.0
 
 require 'set'
 
-module Eventful
+module Stateful
 
-  def self.extended(klass)
-    klass.extend(Eventful::ClassMethods)
-    klass.send(:include, Eventful::InstanceMethods)
-  end
+  class << self
 
-  def self.included(klass)
-    klass.extend(Eventful::ClassMethods)
-    klass.send(:include, Eventful::InstanceMethods)
-  end
+    def extended(klass)
+      klass.extend(Stateful::ClassMethods)
+      klass.send(:include, Stateful::InstanceMethods)
+    end
+    alias_method :included, :extended
+
+  end # class << self
 
   module ClassMethods
 
-    def eventful_states
-      @eventful_states ||= Eventful::States.new
+    def stateful_states
+      @stateful_states ||= Stateful::States.new
     end
 
     def initial_state(state_name)
-      eventful_states.initial_state = state_name
+      stateful_states.initial_state = state_name
     end
 
     def final_state(state_name)
-      eventful_states.final_state = state_name
+      stateful_states.final_state = state_name
     end
 
     def state(state_name, &block)
-      @state = eventful_states.find_or_create(state_name)
+      @state = stateful_states.find_or_create(state_name)
       instance_eval(&block) if block
       @state.transitions.each do |transition|
         set_event_method(transition)
@@ -45,7 +45,7 @@ module Eventful
     def set_event_method(transition)
       module_eval do
         define_method "#{transition.event_name}" do
-          instance_variable_set(:@current_state, self.class.eventful_states.find(current_state.next_state_name(transition.event_name)))
+          instance_variable_set(:@current_state, self.class.stateful_states.find(current_state.next_state_name(transition.event_name)))
         end
       end
     end
@@ -71,11 +71,11 @@ module Eventful
   module InstanceMethods
 
     def current_state=(state)
-      @current_state = self.class.eventful_states.find(state)
+      @current_state = self.class.stateful_states.find(state)
     end
 
     def current_state
-      @current_state ||= self.class.eventful_states.initial_state
+      @current_state ||= self.class.stateful_states.initial_state
     end
 
     def next_state_name(event_name)
@@ -83,7 +83,7 @@ module Eventful
     end
 
     def next_state(event_name)
-      self.class.eventful_states.find(current_state.next_state_name(event_name))
+      self.class.stateful_states.find(current_state.next_state_name(event_name))
     end
 
     def transitions
@@ -91,11 +91,11 @@ module Eventful
     end
 
     def initial_state?
-      self.class.eventful_states.initial_state == current_state
+      self.class.stateful_states.initial_state == current_state
     end
 
     def final_state?
-      self.class.eventful_states.final_state == current_state
+      self.class.stateful_states.final_state == current_state
     end
 
   end # class InstanceMethods
