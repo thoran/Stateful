@@ -8,8 +8,12 @@ module Stateful
       current_state.next_state_name(event_name)
     end
 
+    def all_states
+      self.class.stateful_states
+    end
+
     def next_state(event_name)
-      self.class.stateful_states.find(current_state.next_state_name(event_name))
+      all_states.find(current_state.next_state_name(event_name))
     end
 
     def transitions

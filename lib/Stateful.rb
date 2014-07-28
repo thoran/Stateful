@@ -1,10 +1,9 @@
 # Stateful.rb
 # Stateful
 
-# 20140111
-# 0.5.1
+# 20140111, 27
+# 0.5.2
 
-require 'set'
 require_relative 'Stateful/ClassMethods'
 require_relative 'Stateful/InstanceMethods'
 

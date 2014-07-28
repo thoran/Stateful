@@ -1,6 +1,7 @@
 # Stateful/State.rb
 # Stateful::State
 
+require 'set'
 require_relative 'Transition'
 
 module Stateful
