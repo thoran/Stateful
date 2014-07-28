@@ -2,7 +2,7 @@
 # Eventful
 
 # 20131229
-# 0.1.1
+# 0.1.2
 
 require 'set'
 
@@ -40,7 +40,7 @@ module Eventful
     def set_event_method(transition)
       module_eval do
         define_method "#{transition.event_name}" do
-          instance_variable_set(:@current_state, self.class.eventful_states.find(current_state.next_state(transition.event_name)))
+          instance_variable_set(:@current_state, self.class.eventful_states.find(current_state.next_state_name(transition.event_name)))
         end
       end
     end
@@ -71,6 +71,26 @@ module Eventful
 
     def current_state
       @current_state ||= self.class.eventful_states.initial_state
+    end
+
+    def next_state_name(event_name)
+      current_state.next_state_name(event_name)
+    end
+
+    def next_state(event_name)
+      self.class.eventful_states.find(current_state.next_state_name(event_name))
+    end
+
+    def transitions
+      current_state.transitions
+    end
+
+    def initial_state?
+      self.class.eventful_states.initial_state == current_state
+    end
+
+    def final_state?
+      self.class.eventful_states.final_state == current_state
     end
 
   end # class InstanceMethods
@@ -139,11 +159,7 @@ module Eventful
       transitions << Transition.new(event_name, new_state)
     end
 
-    def new_state?
-      State.new_state?(self)
-    end
-  
-    def next_state(event_name)
+    def next_state_name(event_name)
       transitions.detect{|transition| transition.event_name == event_name}.next_state_name
     end
 

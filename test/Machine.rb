@@ -8,12 +8,12 @@ class Machine
 
   initial_state :state
 
-  given :state do
+  state :state do
     on :an_event => :next_state
     on :another_event => :final_state
   end
 
-  given :next_state do
+  state :next_state do
     on :any_event => :final_state
   end
 
@@ -21,33 +21,18 @@ class Machine
 
 end
 
-class Machine2
-
-  extend Eventful
-
-  initial_state :state
-
-  state :state do
-    event :an_event => :next_state2
-    event :another_event => :final_state2
-  end
-
-  state :next_state2 do
-    event :any_event2 => :final_state2
-  end
-
-  final_state :final_state
-
-end
-
-p m = Machine.new
+m = Machine.new
 p m.current_state.name
+p m.initial_state?
+p m.final_state?
+p m.transitions
+p m.next_state(:an_event)
 p m.an_event
+p m.transitions
+p m.next_state(:any_event)
 p m.current_state.name
 p m.any_event
+p m.transitions
 p m.current_state.name
-puts
-p m2 = Machine2.new
-p m2.current_state.name
-p m2.an_event
-p m2.current_state.name
+p m.initial_state?
+p m.final_state?
