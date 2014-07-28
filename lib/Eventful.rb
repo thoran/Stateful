@@ -1,14 +1,19 @@
 # Eventful.rb
 # Eventful
 
-# 20131229
-# 0.1.2
+# 20140110
+# 0.1.3
 
 require 'set'
 
 module Eventful
 
   def self.extended(klass)
+    klass.extend(Eventful::ClassMethods)
+    klass.send(:include, Eventful::InstanceMethods)
+  end
+
+  def self.included(klass)
     klass.extend(Eventful::ClassMethods)
     klass.send(:include, Eventful::InstanceMethods)
   end

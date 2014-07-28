@@ -1,10 +1,10 @@
-# 20131229
+# 20140110
 
 require '../lib/Eventful'
 
 class Machine
 
-  extend Eventful
+  include Eventful
 
   initial_state :state
 
