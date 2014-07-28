@@ -2,7 +2,7 @@
 # Stateful
 
 # 20140110
-# 0.2.0
+# 0.3.0
 
 require 'set'
 
@@ -45,7 +45,7 @@ module Stateful
     def set_event_method(transition)
       module_eval do
         define_method "#{transition.event_name}" do
-          instance_variable_set(:@current_state, self.class.stateful_states.find(current_state.next_state_name(transition.event_name)))
+          self.send('current_state=', self.class.stateful_states.find(current_state.next_state_name(transition.event_name)))
         end
       end
     end

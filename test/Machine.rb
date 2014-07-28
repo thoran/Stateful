@@ -1,10 +1,32 @@
 # 20140110
 
-require '../lib/Stateful'
+require 'active_record'
+require '../lib/Stateful/ActiveRecord'
+require 'pg'
 
-class Machine
+ActiveRecord::Base.establish_connection(
+  adapter: 'postgresql',
+  host: 'localhost',
+  database: 'test'
+)
 
-  extend Stateful
+class CreateMachine < ActiveRecord::Migration
+
+  def change
+    create_table :machines do |t|
+      t.string :current_state
+    end
+  end
+
+end
+
+unless ActiveRecord::Base.connection.tables.include?('machines')
+  CreateMachine.new.change
+end
+
+class Machine < ActiveRecord::Base
+
+  extend Stateful::ActiveRecord
 
   initial_state :state
 
@@ -22,17 +44,21 @@ class Machine
 end
 
 m = Machine.new
-p m.current_state.name
 p m.initial_state?
 p m.final_state?
+20.times{print '-'}; puts
+p m.current_state.name
 p m.transitions
 p m.next_state(:an_event)
+20.times{print '-'}; puts
 p m.an_event
+p m.current_state.name
 p m.transitions
 p m.next_state(:any_event)
-p m.current_state.name
+20.times{print '-'}; puts
 p m.any_event
-p m.transitions
 p m.current_state.name
+p m.transitions
+20.times{print '-'}; puts
 p m.initial_state?
 p m.final_state?
