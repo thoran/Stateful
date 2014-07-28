@@ -2,6 +2,7 @@
 # Stateful::Poro
 
 require_relative '../Stateful'
+require_relative 'Poro/InstanceMethods'
 
 module Stateful
   module Poro
@@ -16,18 +17,6 @@ module Stateful
       alias_method :included, :extended
 
     end # class << self
-
-    module InstanceMethods
-
-      def current_state=(state)
-        @current_state = self.class.stateful_states.find(state)
-      end
-
-      def current_state
-        @current_state ||= self.class.stateful_states.initial_state
-      end
-
-    end
 
   end
 end

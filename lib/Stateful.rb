@@ -2,7 +2,7 @@
 # Stateful
 
 # 20140111
-# 0.5.0
+# 0.5.1
 
 require 'set'
 require_relative 'Stateful/ClassMethods'
