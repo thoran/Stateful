@@ -12,9 +12,12 @@ module Stateful
 
     # DSL
 
-    def initial_state(state_name = nil)
+    def initial_state(state_name = nil, &block)
       if state_name
         stateful_states.initial_state = state_name
+        if block_given?
+          state(state_name, &block)
+        end
       else
         stateful_states.initial_state
       end
@@ -53,6 +56,12 @@ module Stateful
       define_method "#{state_name}?" do
         current_state.name == state_name
       end
+    end
+
+    # boolean methods
+
+    def final_state?
+      !final_state.nil?
     end
 
   end

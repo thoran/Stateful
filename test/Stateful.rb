@@ -1,19 +1,23 @@
 # test/Stateful.rb
 
-# 20140112
-# 0.5.0
+# 20140616
 
-require 'Version'
-require 'Kernel/require_relative' if Version.new(RUBY_VERSION) < '1.9'
-# require 'minitest/autorun'
+gem 'minitest'
+gem 'minitest-spec-context'
 
-require_relative '../lib/Stateful'
+require 'minitest/autorun'
+require 'minitest-spec-context'
 
-def test_files
-  Dir.glob(File.expand_path(File.join(File.dirname(__FILE__), '*.rb'))) - [File.expand_path(__FILE__)]
-end
+test_dir = File.dirname(File.expand_path(__FILE__))
+$LOAD_PATH.unshift(test_dir) unless $LOAD_PATH.include?(test_dir)
 
-test_files.each do |test_file|
-  puts test_file
-  system "ruby #{test_file}"
-end
+require 'Kernel/with_warning'
+
+lib_dir = File.expand_path(File.join(test_dir, '..', 'lib'))
+$LOAD_PATH.unshift(lib_dir) unless $LOAD_PATH.include?(lib_dir)
+
+active_record_specs = Dir[File.join(test_dir, 'ActiveRecord', '**', '*.rb')]
+active_record_specs.each{|spec| require spec}
+
+poro_specs = Dir[File.join(test_dir, 'Poro', '**', '*.rb')]
+poro_specs.each{|spec| require spec}

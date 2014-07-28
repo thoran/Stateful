@@ -1,8 +1,8 @@
 # Stateful.rb
 # Stateful
 
-# 20140204
-# 0.6.0
+# 20140616
+# 0.7.0
 
 require_relative 'Stateful/ClassMethods'
 require_relative 'Stateful/InstanceMethods'

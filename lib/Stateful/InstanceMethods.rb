@@ -20,6 +20,16 @@ module Stateful
       current_state.transitions
     end
 
+    def initial_state
+      self.class.initial_state
+    end
+
+    def final_state
+      self.class.final_state
+    end
+
+    # boolean methods
+
     def initial_state?
       self.class.initial_state == current_state
     end
