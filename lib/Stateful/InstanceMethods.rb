@@ -17,11 +17,11 @@ module Stateful
     end
 
     def initial_state?
-      self.class.stateful_states.initial_state == current_state
+      self.class.initial_state == current_state
     end
 
     def final_state?
-      self.class.stateful_states.final_state == current_state
+      self.class.final_state == current_state
     end
 
   end

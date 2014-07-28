@@ -10,12 +10,20 @@ module Stateful
       @stateful_states ||= Stateful::States.new
     end
 
-    def initial_state(state_name)
-      stateful_states.initial_state = state_name
+    def initial_state(state_name = nil)
+      if state_name
+        stateful_states.initial_state = state_name
+      else
+        stateful_states.initial_state
+      end
     end
 
-    def final_state(state_name)
-      stateful_states.final_state = state_name
+    def final_state(state_name = nil)
+      if state_name
+        stateful_states.final_state = state_name
+      else
+        stateful_states.final_state
+      end
     end
 
     def state(state_name, &block)
