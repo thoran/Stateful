@@ -1,10 +1,10 @@
-# 20131228
+# 20131229
 
-require '../lib/SimpleState'
+require '../lib/Eventful'
 
 class Machine
 
-  include SimpleState
+  extend Eventful
 
   initial_state :state
 
@@ -23,7 +23,7 @@ end
 
 class Machine2
 
-  include SimpleState
+  extend Eventful
 
   initial_state :state
 
@@ -43,6 +43,8 @@ end
 p m = Machine.new
 p m.current_state.name
 p m.an_event
+p m.current_state.name
+p m.any_event
 p m.current_state.name
 puts
 p m2 = Machine2.new
