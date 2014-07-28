@@ -2,7 +2,7 @@
 # Eventful
 
 # 20131229
-# 0.1.0
+# 0.1.1
 
 require 'set'
 
@@ -35,6 +35,7 @@ module Eventful
         set_status_boolean_method(state_name)
       end
     end
+    alias_method :given, :state
 
     def set_event_method(transition)
       module_eval do
@@ -55,6 +56,10 @@ module Eventful
     def event(event)
       @state.event(event)
     end
+    alias_method :on, :event
+    alias_method :action, :state
+    alias_method :message, :state
+    alias_method :trigger, :state
 
   end # class ClassMethods
 

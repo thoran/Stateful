@@ -8,13 +8,13 @@ class Machine
 
   initial_state :state
 
-  state :state do
-    event :an_event => :next_state
-    event :another_event => :final_state
+  given :state do
+    on :an_event => :next_state
+    on :another_event => :final_state
   end
 
-  state :next_state do
-    event :any_event => :final_state
+  given :next_state do
+    on :any_event => :final_state
   end
 
   final_state :final_state
