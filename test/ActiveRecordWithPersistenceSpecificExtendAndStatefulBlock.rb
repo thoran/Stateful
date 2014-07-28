@@ -1,5 +1,5 @@
 require 'active_record'
-require '../lib/Stateful'
+require '../lib/Stateful/ActiveRecord'
 require 'pg'
 
 ActiveRecord::Base.establish_connection(
@@ -24,20 +24,22 @@ end
 
 class Machine < ActiveRecord::Base
 
-  extend Stateful
+  extend Stateful::ActiveRecord
 
-  initial_state :state
+  stateful do
+    initial_state :state
 
-  state :state do
-    on :an_event => :next_state
-    on :another_event => :final_state
+    state :state do
+      on :an_event => :next_state
+      on :another_event => :final_state
+    end
+
+    state :next_state do
+      on :any_event => :final_state
+    end
+
+    final_state :final_state
   end
-
-  state :next_state do
-    on :any_event => :final_state
-  end
-
-  final_state :final_state
 
 end
 

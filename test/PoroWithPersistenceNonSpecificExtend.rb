@@ -1,5 +1,3 @@
-# 20140111
-
 require '../lib/Stateful'
 
 class Machine

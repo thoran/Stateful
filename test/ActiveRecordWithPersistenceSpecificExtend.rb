@@ -1,5 +1,3 @@
-# 20140111
-
 require 'active_record'
 require '../lib/Stateful/ActiveRecord'
 require 'pg'

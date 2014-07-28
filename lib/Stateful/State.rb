@@ -19,6 +19,7 @@ module Stateful
       event_name, new_state = event.keys.first, event.values.first
       transitions << Transition.new(event_name, new_state)
     end
+    alias_method :on, :event
 
     def next_state_name(event_name)
       transitions.detect{|transition| transition.event_name == event_name}.next_state_name

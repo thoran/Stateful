@@ -7,10 +7,9 @@ module Stateful
   class States
 
     attr_reader :all
-    attr_reader :initial_state
-    attr_reader :final_state
 
-    def initialize
+    def initialize(klass)
+      @klass = klass
       @all = []
       @initial_state = nil
       @final_state = nil
@@ -39,16 +38,39 @@ module Stateful
       )
     end
 
-    def initial_state=(state_name)
-      @initial_state = State.new(state_name)
-      all << @initial_state
-      @initial_state
+    def initial_state(state_name = nil)
+      if state_name
+        @initial_state = State.new(state_name)
+        all << @initial_state
+        @initial_state
+      else
+        @initial_state
+      end
+    end
+    alias_method :initial_state=, :initial_state
+
+    def final_state(state_name = nil)
+      if state_name
+        @final_state = State.new(state_name)
+        all << @final_state
+        @final_state
+      else
+        @final_state
+      end
+    end
+    alias_method :final_state=, :final_state
+
+    def state(state_name, &block)
+      state = find_or_create(state_name)
+      state.instance_eval(&block) if block
+      state.transitions.each do |transition|
+        @klass.set_event_method(transition)
+      end
+      @klass.set_status_boolean_method(state_name)
     end
 
-    def final_state=(state_name)
-      @final_state = State.new(state_name)
-      all << @final_state
-      @final_state
+    def stateful(&block)
+      instance_eval(&block) if block
     end
 
   end
