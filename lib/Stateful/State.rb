@@ -22,7 +22,9 @@ module Stateful
     alias_method :on, :event
 
     def next_state_name(event_name)
-      transitions.detect{|transition| transition.event_name == event_name}.next_state_name
+      if matching_transition = transitions.detect{|transition| transition.event_name == event_name}
+        matching_transition.next_state_name
+      end
     end
 
   end

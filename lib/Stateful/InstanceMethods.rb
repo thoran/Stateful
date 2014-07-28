@@ -4,10 +4,6 @@
 module Stateful
   module InstanceMethods
 
-    def next_state_name(event_name)
-      current_state.next_state_name(event_name)
-    end
-
     def all_states
       self.class.stateful_states
     end
@@ -31,11 +27,11 @@ module Stateful
     # boolean methods
 
     def initial_state?
-      self.class.initial_state == current_state
+      current_state == initial_state
     end
 
     def final_state?
-      self.class.final_state == current_state
+      current_state == final_state
     end
 
     def active?

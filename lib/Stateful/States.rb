@@ -16,7 +16,13 @@ module Stateful
     end
 
     def detect(candidate_state)
-      candidate_state_name = candidate_state.is_a?(State) ? candidate_state.name : candidate_state
+      candidate_state_name = (
+        if candidate_state.is_a?(State)
+          candidate_state.name
+        else
+          candidate_state && candidate_state.to_sym
+        end
+      )
       self.all.detect{|state| state.name == candidate_state_name}
     end
     alias_method :find, :detect

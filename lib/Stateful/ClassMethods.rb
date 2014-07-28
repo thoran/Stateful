@@ -15,9 +15,7 @@ module Stateful
     def initial_state(state_name = nil, &block)
       if state_name
         stateful_states.initial_state = state_name
-        if block_given?
-          state(state_name, &block)
-        end
+        state(state_name, &block) if block
       else
         stateful_states.initial_state
       end
@@ -48,7 +46,8 @@ module Stateful
 
     def set_event_method(transition)
       define_method "#{transition.event_name}" do
-        self.send('current_state=', self.class.stateful_states.find(current_state.next_state_name(transition.event_name)))
+        next_state = self.class.stateful_states.find(current_state.next_state_name(transition.event_name))
+        self.send('current_state=', next_state)
       end
     end
 
@@ -63,6 +62,7 @@ module Stateful
     def final_state?
       !final_state.nil?
     end
+    alias_method :has_final_state?, :final_state?
 
   end
 end

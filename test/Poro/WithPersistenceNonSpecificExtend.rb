@@ -79,6 +79,10 @@ describe Stateful::Poro do
     it "must know what transitions are available" do
       machine.transitions.collect{|t| [t.event_name, t.next_state_name]}.must_equal [[:an_event, :next_state], [:another_event, :final_state]]
     end
+
+    it "must be active" do
+      machine.active?.must_equal true
+    end
   end
 
   context "next_state" do
@@ -89,12 +93,14 @@ describe Stateful::Poro do
     it "must not be in the initial state" do
       machine.initial_state?.must_equal false
     end
+
     it "must not be in the final state" do
       machine.final_state?.must_equal false
     end
 
     it "must be in the next_state state" do
-      machine.current_state.name == :next_state
+      machine.current_state.name.must_equal :next_state
+      machine.next_state?.must_equal true
     end
 
     it "must have a set of transitions to other states" do
@@ -109,6 +115,9 @@ describe Stateful::Poro do
       machine.transitions.collect{|t| [t.event_name, t.next_state_name]}.must_equal [[:yet_another_event, :final_state]]
     end
 
+    it "must be active" do
+      machine.active?.must_equal true
+    end
   end
 
   context "final_state" do
@@ -134,6 +143,10 @@ describe Stateful::Poro do
 
     it "must have no transitions" do
       machine.transitions.empty?.must_equal true
+    end
+
+    it "must not be active" do
+      machine.active?.must_equal false
     end
   end
 
