@@ -155,8 +155,8 @@ describe Stateful::ActiveRecord do
       machine.final_state.must_equal ActiveRecordMachine5.stateful_states.final_state
     end
 
-    it "must have a final state with name as per the name given" do
-      machine.final_state.name.must_equal :final_state
+    it "must have a state with name as per the name given" do
+      machine.current_state.name.must_equal :final_state
     end
 
     it "must not be in the initial state (assuming that initial and final are different states)" do

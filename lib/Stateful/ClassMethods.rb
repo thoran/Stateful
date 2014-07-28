@@ -21,14 +21,12 @@ module Stateful
       end
     end
 
-    # It doesn't make much sense to specify any options here, such as those pertaining to whether
-    # a transition is deterministic or not, since there are no transitions from a final state.
-    def final_state(state_name = nil)
-      if state_name
-        stateful_states.final_state = state_name
-      else
-        stateful_states.final_state
-      end
+    def final_state(*state_names)
+      final_states(*state_names).first
+    end
+
+    def final_states(*state_names)
+      stateful_states.final_states(*state_names)
     end
 
     def state(state_name, options = {}, &block)
@@ -62,7 +60,7 @@ module Stateful
     # boolean methods
 
     def final_state?
-      !final_state.nil?
+      !final_states.empty?
     end
     alias_method :has_final_state?, :final_state?
 

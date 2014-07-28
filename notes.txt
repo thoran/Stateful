@@ -1,0 +1,4 @@
+Things under consideration as of 20140612:
+* json injectable state machine definitions (so as to enable reprogramming of state machines on the fly)
+* multiple sets of states per class (need to be able to define multiple differently named stateful_state blocks)
+* before and after hooks

@@ -1,6 +1,7 @@
 # Stateful/States.rb
 # Stateful::States
 
+require 'set'
 require_relative 'State'
 
 module Stateful
@@ -12,7 +13,7 @@ module Stateful
       @klass = klass
       @all = []
       @initial_state = nil
-      @final_state = nil
+      @final_states = Set.new
     end
 
     def detect(candidate_state)
@@ -60,16 +61,25 @@ module Stateful
     end
     alias_method :initial_state=, :initial_state
 
-    def final_state(state_name = nil)
-      if state_name
-        @final_state = State.new(state_name)
-        all << @final_state
-        @final_state
-      else
-        @final_state
-      end
+    def final_state(*state_names)
+      final_states(*state_names).first
     end
     alias_method :final_state=, :final_state
+
+    def final_states(*state_names)
+      state_names = state_names.flatten
+      if !state_names.empty?
+        state_names.each do |state_name|
+          final_state = State.new(state_name)
+          @final_states << final_state
+          all << final_state
+        end
+        @final_states
+      else
+        @final_states
+      end
+    end
+    alias_method :final_states=, :final_states
 
     def state(state_name, options = {}, &block)
       state = find_or_create(state_name, options)

@@ -24,6 +24,10 @@ module Stateful
       self.class.final_state
     end
 
+    def final_states
+      self.class.final_states
+    end
+
     # boolean methods
 
     def initial_state?
@@ -31,7 +35,7 @@ module Stateful
     end
 
     def final_state?
-      current_state == final_state
+      final_states.include?(current_state)
     end
 
     def active?
