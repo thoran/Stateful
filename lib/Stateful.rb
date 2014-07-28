@@ -1,22 +1,12 @@
 # Stateful.rb
 # Stateful
 
-# 20140110
-# 0.3.0
+# 20140111
+# 0.3.1
 
 require 'set'
 
 module Stateful
-
-  class << self
-
-    def extended(klass)
-      klass.extend(Stateful::ClassMethods)
-      klass.send(:include, Stateful::InstanceMethods)
-    end
-    alias_method :included, :extended
-
-  end # class << self
 
   module ClassMethods
 
@@ -66,17 +56,9 @@ module Stateful
     alias_method :message, :state
     alias_method :trigger, :state
 
-  end # class ClassMethods
+  end # module ClassMethods
 
   module InstanceMethods
-
-    def current_state=(state)
-      @current_state = self.class.stateful_states.find(state)
-    end
-
-    def current_state
-      @current_state ||= self.class.stateful_states.initial_state
-    end
 
     def next_state_name(event_name)
       current_state.next_state_name(event_name)
@@ -98,7 +80,7 @@ module Stateful
       self.class.stateful_states.final_state == current_state
     end
 
-  end # class InstanceMethods
+  end # module InstanceMethods
 
   class States
 

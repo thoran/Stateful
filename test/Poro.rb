@@ -1,32 +1,10 @@
-# 20140110
+# 20140111
 
-require 'active_record'
-require '../lib/Stateful/ActiveRecord'
-require 'pg'
+require '../lib/Stateful/Poro'
 
-ActiveRecord::Base.establish_connection(
-  adapter: 'postgresql',
-  host: 'localhost',
-  database: 'test'
-)
+class Machine
 
-class CreateMachine < ActiveRecord::Migration
-
-  def change
-    create_table :machines do |t|
-      t.string :current_state
-    end
-  end
-
-end
-
-unless ActiveRecord::Base.connection.tables.include?('machines')
-  CreateMachine.new.change
-end
-
-class Machine < ActiveRecord::Base
-
-  extend Stateful::ActiveRecord
+  extend Stateful::Poro
 
   initial_state :state
 
