@@ -1,8 +1,8 @@
 # Stateful.rb
 # Stateful
 
-# 20140111, 27
-# 0.5.2
+# 20140203
+# 0.5.3
 
 require_relative 'Stateful/ClassMethods'
 require_relative 'Stateful/InstanceMethods'
@@ -13,10 +13,10 @@ module Stateful
 
     def load_persistance_class_instance_methods(klass)
       if defined?(ActiveRecord::Base) && klass < ActiveRecord::Base
-        require_relative "Stateful/ActiveRecord"
+        require_relative 'Stateful/ActiveRecord'
         klass.send(:include, Stateful::ActiveRecord::InstanceMethods)
       else
-        require_relative "Stateful/Poro"
+        require_relative 'Stateful/Poro'
         klass.send(:include, Stateful::Poro::InstanceMethods)
       end
     end

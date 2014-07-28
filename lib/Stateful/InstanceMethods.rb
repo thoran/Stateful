@@ -28,5 +28,9 @@ module Stateful
       self.class.final_state == current_state
     end
 
+    def active?
+      !final_state?
+    end
+
   end
 end

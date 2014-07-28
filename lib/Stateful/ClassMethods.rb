@@ -37,18 +37,14 @@ module Stateful
     alias_method :given, :state
 
     def set_event_method(transition)
-      module_eval do
-        define_method "#{transition.event_name}" do
-          self.send('current_state=', self.class.stateful_states.find(current_state.next_state_name(transition.event_name)))
-        end
+      define_method "#{transition.event_name}" do
+        self.send('current_state=', self.class.stateful_states.find(current_state.next_state_name(transition.event_name)))
       end
     end
 
     def set_status_boolean_method(state_name)
-      module_eval do
-        define_method "#{state_name}?" do
-          current_state.name == state_name
-        end
+      define_method "#{state_name}?" do
+        current_state.name == state_name
       end
     end
 
@@ -56,9 +52,9 @@ module Stateful
       @state.event(event)
     end
     alias_method :on, :event
-    alias_method :action, :state
-    alias_method :message, :state
-    alias_method :trigger, :state
+    alias_method :action, :event
+    alias_method :message, :event
+    alias_method :trigger, :event
 
   end
 end
