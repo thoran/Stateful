@@ -1,7 +1,5 @@
 # test/ActiveRecord/WithPersistenceNonSpecificExtendAndStatefulBlock.rb
 
-# 20140616
-
 gem 'minitest'
 gem 'minitest-spec-context'
 

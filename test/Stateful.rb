@@ -1,7 +1,5 @@
 # test/Stateful.rb
 
-# 20140730
-
 gem 'minitest'
 gem 'minitest-spec-context'
 

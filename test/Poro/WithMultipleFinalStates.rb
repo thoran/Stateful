@@ -1,7 +1,5 @@
 # test/Poro/WithMultipleFinalStates.rb
 
-# 20140728
-
 gem 'minitest'
 gem 'minitest-spec-context'
 

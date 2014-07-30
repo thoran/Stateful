@@ -1,7 +1,5 @@
 # test/Poro/WithExplicitDeterministicEventOrdering.rb
 
-# 20140728
-
 gem 'minitest'
 gem 'minitest-spec-context'
 
