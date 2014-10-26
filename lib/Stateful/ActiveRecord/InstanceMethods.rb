@@ -21,6 +21,13 @@ module Stateful
         )
       end
 
+      def active=(active)
+        @active = active
+        write_attribute(:active, @active)
+        self.save
+        @active
+      end
+
     end
   end
 end
