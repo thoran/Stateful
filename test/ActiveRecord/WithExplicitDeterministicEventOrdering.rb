@@ -1,4 +1,4 @@
-# test/ActiveRecord/WithExplicitNonDeterministicEventOrdering.rb
+# test/ActiveRecord/WithExplicitDeterministicEventOrdering.rb
 
 gem 'minitest'
 gem 'minitest-spec-context'
@@ -27,7 +27,7 @@ class ActiveRecordMachine6 < ActiveRecord::Base
 
   extend Stateful
 
-  initial_state :initial_state, non_deterministic: true do
+  initial_state :initial_state, deterministic: true do
     on :an_event => :next_state
     on :another_event => :final_state
   end
@@ -88,8 +88,9 @@ describe Stateful::ActiveRecord do
       machine.next_state(:another_event).must_equal ActiveRecordMachine6.stateful_states.find(:final_state)
     end
 
-    it "must have an intial state which has as set of transitions to other states" do
-      machine.transitions.class.must_equal Set
+    it "must have an intial state which has a collection of transitions to other states" do
+      machine.transitions.class.must_equal Array
+      machine.transitions.all?{|transition| transition.is_a?(Stateful::Transition)}.must_equal true
     end
 
     it "must have two transitions to other states" do
@@ -123,8 +124,9 @@ describe Stateful::ActiveRecord do
       machine.next_state?.must_equal true
     end
 
-    it "must have a set of transitions to other states" do
+    it "must have a collection of transitions to other states" do
       machine.transitions.class.must_equal Array
+      machine.transitions.all?{|transition| transition.is_a?(Stateful::Transition)}.must_equal true
     end
 
     it "must have one transition to other states" do

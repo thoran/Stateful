@@ -38,7 +38,7 @@ module Stateful
       set_status_boolean_method(state_name)
     end
 
-    def stateful(&block)
+    def stateful(options = {}, &block)
       stateful_states.stateful(&block) if block
     end
 

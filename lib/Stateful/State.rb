@@ -1,7 +1,7 @@
 # Stateful/State.rb
 # Stateful::State
 
-require 'set'
+require_relative File.join('..', 'Array', 'shuffle')
 require_relative 'Transition'
 
 module Stateful
@@ -9,19 +9,19 @@ module Stateful
 
     attr_accessor :name
     attr_accessor :transitions
+    attr_accessor :options
 
     def initialize(name, options = {})
       @name = name
-      if options[:non_deterministic] || (options[:deterministic] && !options[:deterministic])
-        @transitions = Set.new
-      else # if options[:deterministic] || !options[:non_deterministic], or no options set, then
-        @transitions = Array.new
-      end
+      @options = options
+      @transitions = Array.new
     end
 
     def event(event)
       event_name, new_state = event.keys.first, event.values.first
       transitions << Transition.new(event_name, new_state)
+      transitions.shuffle if non_deterministic_event_ordering?
+      transitions
     end
     alias_method :on, :event
 
@@ -29,6 +29,12 @@ module Stateful
       if matching_transition = transitions.detect{|transition| transition.event_name == event_name}
         matching_transition.next_state_name
       end
+    end
+
+    private
+
+    def non_deterministic_event_ordering?
+      options[:non_deterministic_event_ordering] || options[:non_deterministic] || (options[:deterministic] && !options[:deterministic])
     end
 
   end

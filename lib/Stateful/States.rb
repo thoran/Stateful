@@ -1,19 +1,20 @@
 # Stateful/States.rb
 # Stateful::States
 
-require 'set'
 require_relative 'State'
 
 module Stateful
   class States
 
     attr_reader :all
+    attr_reader :options
 
-    def initialize(klass)
+    def initialize(klass, options = {})
       @klass = klass
+      @options = options
       @all = []
       @initial_state = nil
-      @final_states = Set.new
+      @final_states = Array.new
     end
 
     def detect(candidate_state)
@@ -39,7 +40,7 @@ module Stateful
 
     def find_or_create(state_name, options = {})
       find(state_name) || (
-        state = State.new(state_name, options)
+        state = State.new(state_name)
         all << state
         state
       )
@@ -54,6 +55,7 @@ module Stateful
             [state, {}]
           end
         )
+        options.merge!(non_deterministic_event_ordering: global_non_deterministic_event_ordering?)
         @initial_state = find_or_create(state_name, options)
       else
         @initial_state
@@ -82,6 +84,7 @@ module Stateful
     alias_method :final_states=, :final_states
 
     def state(state_name, options = {}, &block)
+      options.merge!(non_deterministic_event_ordering: global_non_deterministic_event_ordering?)
       state = find_or_create(state_name, options)
       state.instance_eval(&block) if block
       state.transitions.each do |transition|
@@ -90,8 +93,18 @@ module Stateful
       @klass.set_status_boolean_method(state_name)
     end
 
-    def stateful(&block)
+    def stateful(options = {}, &block)
+      @options = options
       instance_eval(&block) if block
+    end
+
+    private
+
+    def global_non_deterministic_event_ordering?
+      options[:global_non_deterministic_event_ordering] ||
+        options[:non_deterministic_event_ordering] ||
+          options[:non_deterministic] ||
+            (options[:deterministic] && !options[:deterministic])
     end
 
   end

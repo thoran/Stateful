@@ -1,4 +1,4 @@
-# test/ActiveRecord/WithExplicitNonDeterministicEventOrdering.rb
+# test/ActiveRecord/WithExplicitGlobalNonDeterministicEventOrdering.rb
 
 gem 'minitest'
 gem 'minitest-spec-context'
@@ -16,27 +16,31 @@ require 'Stateful'
 class CreateTableMachines < ActiveRecord::Migration
 
   def change
-    create_table :active_record_machine7s do |t|
+    create_table :active_record_machine10s do |t|
       t.string :current_state
     end
   end
 
 end
 
-class ActiveRecordMachine7 < ActiveRecord::Base
+class ActiveRecordMachine10 < ActiveRecord::Base
 
   extend Stateful
 
-  initial_state :initial_state, non_deterministic: true do
-    on :an_event => :next_state
-    on :another_event => :final_state
-  end
+  stateful global_non_deterministic_event_ordering: true do
+    initial_state :initial_state
 
-  state :next_state do
-    on :yet_another_event => :final_state
-  end
+    state :initial_state do
+      on :an_event => :next_state
+      on :another_event => :final_state
+    end
 
-  final_state :final_state
+    state :next_state do
+      on :yet_another_event => :final_state
+    end
+
+    final_state :final_state
+  end
 
 end
 
@@ -45,23 +49,23 @@ ActiveRecord::Base.establish_connection(
   host: 'localhost',
   database: 'test'
 )
-unless ActiveRecord::Base.connection.tables.include?('active_record_machine7s')
+unless ActiveRecord::Base.connection.tables.include?('active_record_machine10s')
   CreateTableMachines.new.change
 end
-if ActiveRecord::Base.connection.tables.include?('active_record_machine7s')
-  ActiveRecordMachine7.delete_all
+if ActiveRecord::Base.connection.tables.include?('active_record_machine10s')
+  ActiveRecordMachine10.delete_all
 end
 
 describe Stateful::ActiveRecord do
 
-  let(:machine){ActiveRecordMachine7.create}
+  let(:machine){ActiveRecordMachine10.create}
 
   it "must have an initial state" do
     machine.initial_state.wont_be_nil
   end
 
   it "must have a final state (if one has been specified)" do
-    if ActiveRecordMachine7.final_state?
+    if ActiveRecordMachine10.final_state?
       machine.final_state.wont_be_nil
     end
   end
@@ -72,7 +76,7 @@ describe Stateful::ActiveRecord do
     end
 
     it "must have an initial state consistent with what is given" do
-      machine.initial_state.must_equal ActiveRecordMachine7.stateful_states.initial_state
+      machine.initial_state.must_equal ActiveRecordMachine10.stateful_states.initial_state
     end
 
     it "must have an initial state with name as per the name given" do
@@ -84,8 +88,8 @@ describe Stateful::ActiveRecord do
     end
 
     it "must know what it's next state is given an event name" do
-      machine.next_state(:an_event).must_equal ActiveRecordMachine7.stateful_states.find(:next_state)
-      machine.next_state(:another_event).must_equal ActiveRecordMachine7.stateful_states.find(:final_state)
+      machine.next_state(:an_event).must_equal ActiveRecordMachine10.stateful_states.find(:next_state)
+      machine.next_state(:another_event).must_equal ActiveRecordMachine10.stateful_states.find(:final_state)
     end
 
     it "must have an intial state which has a collection of transitions to other states" do
@@ -152,7 +156,7 @@ describe Stateful::ActiveRecord do
     end
 
     it "must have a final state consistent with what is given" do
-      machine.final_state.must_equal ActiveRecordMachine7.stateful_states.final_state
+      machine.final_state.must_equal ActiveRecordMachine10.stateful_states.final_state
     end
 
     it "must have a state with name as per the name given" do

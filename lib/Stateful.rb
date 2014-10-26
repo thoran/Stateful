@@ -2,7 +2,7 @@
 # Stateful
 
 # 20141026
-# 0.10.0
+# 0.11.0
 
 require_relative File.join('Stateful', 'ClassMethods')
 require_relative File.join('Stateful', 'InstanceMethods')

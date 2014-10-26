@@ -64,8 +64,9 @@ describe Stateful::Poro do
       machine.next_state(:another_event).must_equal PoroMachine6.stateful_states.find(:final_state)
     end
 
-    it "must have an intial state which has as set of transitions to other states which is deterministic" do
+    it "must have an intial state which has a collection of transitions to other states" do
       machine.transitions.class.must_equal Array
+      machine.transitions.all?{|transition| transition.is_a?(Stateful::Transition)}.must_equal true
     end
 
     it "must have two transitions to other states" do
@@ -99,8 +100,9 @@ describe Stateful::Poro do
       machine.next_state?.must_equal true
     end
 
-    it "must have a set of transitions to other states" do
+    it "must have a collection of transitions to other states" do
       machine.transitions.class.must_equal Array
+      machine.transitions.all?{|transition| transition.is_a?(Stateful::Transition)}.must_equal true
     end
 
     it "must have one transition to other states" do
