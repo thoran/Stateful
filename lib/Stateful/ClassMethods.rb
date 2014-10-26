@@ -14,7 +14,7 @@ module Stateful
 
     def initial_state(state_name = nil, options = {}, &block)
       if state_name
-        stateful_states.initial_state = state_name, options
+        stateful_states.initial_state(state_name, options)
         state(state_name, options, &block) if block
       else
         stateful_states.initial_state
