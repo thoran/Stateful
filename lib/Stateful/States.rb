@@ -40,7 +40,7 @@ module Stateful
 
     def find_or_create(state_name, options = {})
       find(state_name) || (
-        state = State.new(state_name)
+        state = State.new(state_name, options)
         all << state
         state
       )

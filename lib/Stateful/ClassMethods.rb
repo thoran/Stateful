@@ -29,7 +29,7 @@ module Stateful
     end
 
     def stateful(options = {}, &block)
-      stateful_states.stateful(&block) if block
+      stateful_states.stateful(options, &block)
     end
 
     # end DSL
