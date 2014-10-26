@@ -48,9 +48,7 @@ module Stateful
 
     def initial_state(state_name = nil, options = {}, &block)
       if state_name
-        options.merge!(non_deterministic_event_ordering: global_non_deterministic_event_ordering?)
-        @initial_state = find_or_create(state_name, options)
-        state(state_name, options = {}, &block)
+        @initial_state = state(state_name, options, &block)
       else
         @initial_state
       end
@@ -83,6 +81,7 @@ module Stateful
         @klass.set_event_method(transition)
       end
       @klass.set_status_boolean_method(state_name)
+      state
     end
 
     def stateful(options = {}, &block)

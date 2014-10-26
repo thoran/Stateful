@@ -13,16 +13,11 @@ module Stateful
     # DSL
 
     def initial_state(state_name = nil, options = {}, &block)
-      if state_name
-        stateful_states.initial_state(state_name, options)
-        state(state_name, options, &block) if block
-      else
-        stateful_states.initial_state
-      end
+      stateful_states.initial_state(state_name, options, &block)
     end
 
     def final_state(*state_names)
-      final_states(*state_names).first
+      stateful_states.final_state(*state_names)
     end
 
     def final_states(*state_names)
@@ -30,12 +25,7 @@ module Stateful
     end
 
     def state(state_name, options = {}, &block)
-      state = stateful_states.find_or_create(state_name, options)
-      state.instance_eval(&block) if block
-      state.transitions.each do |transition|
-        set_event_method(transition)
-      end
-      set_status_boolean_method(state_name)
+      stateful_states.state(state_name, options, &block)
     end
 
     def stateful(options = {}, &block)
