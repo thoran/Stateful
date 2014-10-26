@@ -9,12 +9,11 @@ module Stateful
 
     attr_accessor :name
     attr_accessor :transitions
-    attr_accessor :options
 
     def initialize(name, options = {})
       @name = name
       @options = options
-      @transitions = Array.new
+      @transitions = []
     end
 
     def event(event)
@@ -34,7 +33,9 @@ module Stateful
     private
 
     def non_deterministic_event_ordering?
-      options[:non_deterministic_event_ordering] || options[:non_deterministic] || (options[:deterministic] && !options[:deterministic])
+      @options[:non_deterministic_event_ordering] ||
+        @options[:non_deterministic] ||
+          (@options[:deterministic] && !@options[:deterministic])
     end
 
   end

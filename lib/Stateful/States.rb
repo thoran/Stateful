@@ -7,14 +7,13 @@ module Stateful
   class States
 
     attr_reader :all
-    attr_reader :options
 
     def initialize(klass, options = {})
       @klass = klass
       @options = options
       @all = []
       @initial_state = nil
-      @final_states = Array.new
+      @final_states = []
     end
 
     def detect(candidate_state)
@@ -92,10 +91,10 @@ module Stateful
     private
 
     def global_non_deterministic_event_ordering?
-      options[:global_non_deterministic_event_ordering] ||
-        options[:non_deterministic_event_ordering] ||
-          options[:non_deterministic] ||
-            (options[:deterministic] && !options[:deterministic])
+      @options[:global_non_deterministic_event_ordering] ||
+        @options[:non_deterministic_event_ordering] ||
+          @options[:non_deterministic] ||
+            (@options[:deterministic] && !@options[:deterministic])
     end
 
   end
