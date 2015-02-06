@@ -16,16 +16,9 @@ module Stateful
         @current_state = self.class.stateful_states.find(read_attribute(:current_state))
         @current_state ||= (
           initial_state = self.class.stateful_states.initial_state
-          write_attribute(:current_state, initial_state.name)
+          self.current_state = initial_state.name
           initial_state
         )
-      end
-
-      def active=(active)
-        @active = active
-        write_attribute(:active, @active)
-        self.save
-        @active
       end
 
     end

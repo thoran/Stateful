@@ -2,7 +2,6 @@
 # Stateful::Poro
 
 require_relative File.join('..', 'Stateful')
-require_relative File.join('Poro', 'ClassMethods')
 require_relative File.join('Poro', 'InstanceMethods')
 
 module Stateful
@@ -12,7 +11,6 @@ module Stateful
 
       def extended(klass)
         klass.extend(Stateful::ClassMethods)
-        klass.extend(Stateful::Poro::ClassMethods)
         klass.send(:include, Stateful::InstanceMethods)
         klass.send(:include, Stateful::Poro::InstanceMethods)
       end

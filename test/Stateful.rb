@@ -1,11 +1,5 @@
 # test/Stateful.rb
 
-gem 'minitest'
-gem 'minitest-spec-context'
-
-require 'minitest/autorun'
-require 'minitest-spec-context'
-
 test_dir = File.dirname(File.expand_path(__FILE__))
 $LOAD_PATH.unshift(test_dir) unless $LOAD_PATH.include?(test_dir)
 

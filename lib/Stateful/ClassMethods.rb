@@ -34,6 +34,13 @@ module Stateful
 
     # end DSL
 
+    def set_event_method(transition)
+      define_method "#{transition.event_name}" do
+        next_state = self.class.stateful_states.find(current_state.next_state_name(transition.event_name))
+        self.send('current_state=', next_state)
+      end
+    end
+
     def set_status_boolean_method(state_name)
       define_method "#{state_name}?" do
         current_state.name == state_name
