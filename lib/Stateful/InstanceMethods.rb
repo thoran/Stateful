@@ -8,14 +8,6 @@ module Stateful
       self.class.stateful_states
     end
 
-    def next_state(event_name)
-      all_states.find(current_state.next_state_name(event_name))
-    end
-
-    def transitions
-      current_state.transitions
-    end
-
     def initial_state
       self.class.initial_state
     end
@@ -29,14 +21,6 @@ module Stateful
     end
 
     # boolean methods
-
-    def initial_state?
-      current_state == initial_state
-    end
-
-    def final_state?
-      final_states.include?(current_state)
-    end
 
     def active?
       !final_state?

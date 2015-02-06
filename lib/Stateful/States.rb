@@ -77,9 +77,9 @@ module Stateful
       state = find_or_create(state_name, options)
       state.instance_eval(&block) if block
       state.transitions.each do |transition|
-        @klass.set_event_method(transition)
+        @klass.define_event_method(transition)
       end
-      @klass.set_status_boolean_method(state_name)
+      @klass.define_status_boolean_method(state_name)
       state
     end
 
