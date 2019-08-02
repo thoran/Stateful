@@ -1,5 +1,6 @@
 Gem::Specification.new do |spec|
-  spec.name = 'stateful'
+  spec.name = 'stateful.rb' # I would have preferred 'stateful', but there's a gem with the name of stateful.
+
   spec.version = '0.14.1'
   spec.date = '2019-08-02'
 
