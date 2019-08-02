@@ -1,5 +1,5 @@
-# Stateful/ActiveRecord/ClassMethods.rb
-# Stateful::ActiveRecord::ClassMethods
+# Stateful/Poro/ClassMethods.rb
+# Stateful::Poro::ClassMethods
 
 module Stateful
   module Poro
