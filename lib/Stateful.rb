@@ -1,8 +1,8 @@
 # Stateful.rb
 # Stateful
 
-# 20150206
-# 0.14.0
+# 20190802
+# 0.14.1
 
 require_relative File.join('Stateful', 'ClassMethods')
 require_relative File.join('Stateful', 'InstanceMethods')
