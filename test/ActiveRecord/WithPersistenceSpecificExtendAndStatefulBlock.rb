@@ -13,7 +13,7 @@ require 'active_record'
 require 'pg'
 require 'Stateful/ActiveRecord'
 
-class CreateTableMachines < ActiveRecord::Migration
+class CreateTableMachines < ActiveRecord::Migration[6.0]
 
   def change
     create_table :active_record_machine3s do |t|

@@ -1,8 +1,8 @@
 # Stateful/Poro.rb
 # Stateful::Poro
 
-require_relative File.join('Stateful', 'ClassMethods')
-require_relative File.join('Stateful', 'InstanceMethods')
+require_relative 'ClassMethods'
+require_relative 'InstanceMethods'
 require_relative File.join('Poro', 'ClassMethods')
 
 module Stateful

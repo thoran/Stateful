@@ -1,8 +1,8 @@
 Gem::Specification.new do |spec|
   spec.name = 'stateful.rb' # I would have preferred 'stateful', but there's a gem with the name of stateful.
 
-  spec.version = '0.14.3'
-  spec.date = '2019-11-24'
+  spec.version = '0.14.4'
+  spec.date = '2019-11-25'
 
   spec.summary = "A Ruby state machine."
   spec.description = "Easily add state and manage it with Poro and ActiveRecord objects."
@@ -14,4 +14,9 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir['lib/**/*.rb']
   spec.required_ruby_version = '>= 1.8.6'
+
+  spec.add_development_dependency('minitest')
+  spec.add_development_dependency('minitest-spec-context')
+  spec.add_development_dependency('activerecord')
+  spec.add_development_dependency('pg')
 end
