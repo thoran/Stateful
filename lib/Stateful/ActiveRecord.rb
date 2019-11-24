@@ -1,7 +1,8 @@
 # Stateful/ActiveRecord.rb
 # Stateful::ActiveRecord
 
-require_relative File.join('..', 'Stateful')
+require_relative File.join('Stateful', 'ClassMethods')
+require_relative File.join('Stateful', 'InstanceMethods')
 require_relative File.join('ActiveRecord', 'ClassMethods')   
 
 module Stateful
