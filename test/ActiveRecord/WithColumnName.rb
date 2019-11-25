@@ -59,12 +59,12 @@ describe Stateful::ActiveRecord do
   let(:machine){ActiveRecordMachine12.create}
 
   it "must have an initial state" do
-    _(_(machine.initial_state)).wont_be_nil
+    _(machine.initial_state)).wont_be_nil
   end
 
   it "must have a final state (if one has been specified)" do
     if ActiveRecordMachine12.final_state?
-      _(_(machine.final_state)).wont_be_nil
+      _(machine.final_state)).wont_be_nil
     end
   end
 
