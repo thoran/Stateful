@@ -61,51 +61,51 @@ describe Stateful::ActiveRecord do
   let(:machine){ActiveRecordMachine3.create}
 
   it "must have an initial state" do
-    machine.initial_state.wont_be_nil
+    _(machine.initial_state).wont_be_nil
   end
 
   it "must have a final state (if one has been specified)" do
     if ActiveRecordMachine3.final_state?
-      machine.final_state.wont_be_nil
+      _(machine.final_state).wont_be_nil
     end
   end
 
   context "initial_state" do
     it "must have an initial state before any events occur" do
-      machine.initial_state?.must_equal true
+      _(machine.initial_state?).must_equal true
     end
 
     it "must have an initial state consistent with what is given" do
-      machine.initial_state.must_equal ActiveRecordMachine3.stateful_states.initial_state
+      _(machine.initial_state).must_equal ActiveRecordMachine3.stateful_states.initial_state
     end
 
     it "must have an initial state with name as per the name given" do
-      machine.initial_state.name.must_equal :initial_state
+      _(machine.initial_state.name).must_equal :initial_state
     end
 
     it "must not be in the final state (assuming that initial and final are different states)" do
-      machine.final_state?.must_equal false
+      _(machine.final_state?).must_equal false
     end
 
     it "must know what it's next state is given an event name" do
-      machine.next_state(:an_event).must_equal ActiveRecordMachine3.stateful_states.find(:next_state)
-      machine.next_state(:another_event).must_equal ActiveRecordMachine3.stateful_states.find(:final_state)
+      _(machine.next_state(:an_event)).must_equal ActiveRecordMachine3.stateful_states.find(:next_state)
+      _(machine.next_state(:another_event)).must_equal ActiveRecordMachine3.stateful_states.find(:final_state)
     end
 
     it "must have an intial state which has as set of transitions to other states" do
-      machine.transitions.class.must_equal Array
+      _(machine.transitions.class).must_equal Array
     end
 
     it "must have two transitions to other states" do
-      machine.transitions.size.must_equal 2
+      _(machine.transitions.size).must_equal 2
     end
 
     it "must know what transitions are available" do
-      machine.transitions.collect{|t| [t.event_name, t.next_state_name]}.must_equal [[:an_event, :next_state], [:another_event, :final_state]]
+      _(machine.transitions.collect{|t| [t.event_name, t.next_state_name]}).must_equal [[:an_event, :next_state], [:another_event, :final_state]]
     end
 
     it "must be active" do
-      machine.active?.must_equal true
+      _(machine.active?).must_equal true
     end
   end
 
@@ -115,32 +115,32 @@ describe Stateful::ActiveRecord do
     end
 
     it "must not be in the initial state" do
-      machine.initial_state?.must_equal false
+      _(machine.initial_state?).must_equal false
     end
 
     it "must not be in the final state" do
-      machine.final_state?.must_equal false
+      _(machine.final_state?).must_equal false
     end
 
     it "must be in the next_state state" do
-      machine.current_state.name.must_equal :next_state
-      machine.next_state?.must_equal true
+      _(machine.current_state.name).must_equal :next_state
+      _(machine.next_state?).must_equal true
     end
 
     it "must have a set of transitions to other states" do
-      machine.transitions.class.must_equal Array
+      _(machine.transitions.class).must_equal Array
     end
 
     it "must have one transition to other states" do
-      machine.transitions.size.must_equal 1
+      _(machine.transitions.size).must_equal 1
     end
 
     it "must know what transitions are available" do
-      machine.transitions.collect{|t| [t.event_name, t.next_state_name]}.must_equal [[:yet_another_event, :final_state]]
+      _(machine.transitions.collect{|t| [t.event_name, t.next_state_name]}).must_equal [[:yet_another_event, :final_state]]
     end
 
     it "must be active" do
-      machine.active?.must_equal true
+      _(machine.active?).must_equal true
     end
   end
 
@@ -150,27 +150,27 @@ describe Stateful::ActiveRecord do
     end
 
     it "must have a final state" do
-      machine.final_state?.must_equal true
+      _(machine.final_state?).must_equal true
     end
 
     it "must have a final state consistent with what is given" do
-      machine.final_state.must_equal ActiveRecordMachine3.stateful_states.final_state
+      _(machine.final_state).must_equal ActiveRecordMachine3.stateful_states.final_state
     end
 
     it "must have a state with name as per the name given" do
-      machine.current_state.name.must_equal :final_state
+      _(machine.current_state.name).must_equal :final_state
     end
 
     it "must not be in the initial state (assuming that initial and final are different states)" do
-      machine.initial_state?.must_equal false
+      _(machine.initial_state?).must_equal false
     end
 
     it "must have no transitions" do
-      machine.transitions.empty?.must_equal true
+      _(machine.transitions.empty?).must_equal true
     end
 
     it "must not be active" do
-      machine.active?.must_equal false
+      _(machine.active?).must_equal false
     end
   end
 
