@@ -7,7 +7,7 @@ module Stateful
 
     def extended(klass)
       if defined?(::ActiveRecord::Base) && klass < ::ActiveRecord::Base
-        require_relative File.join('Stateful', 'ActiveRecord')  
+        require_relative File.join('Stateful', 'ActiveRecord')
         klass.extend(Stateful::ActiveRecord)
       else
         require_relative File.join('Stateful', 'Poro')

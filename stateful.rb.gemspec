@@ -1,8 +1,8 @@
 Gem::Specification.new do |spec|
   spec.name = 'stateful.rb' # I would have preferred 'stateful', but there's a gem with the name of stateful.
 
-  spec.version = '0.14.4'
-  spec.date = '2019-11-25'
+  spec.version = '0.14.8'
+  spec.date = '2019-11-26'
 
   spec.summary = "A Ruby state machine."
   spec.description = "Easily add state and manage it with Poro and ActiveRecord objects."
