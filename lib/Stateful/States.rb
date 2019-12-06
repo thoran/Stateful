@@ -79,7 +79,7 @@ module Stateful
       state.transitions.each do |transition|
         @klass.define_event_method(transition)
       end
-      @klass.define_status_boolean_method(state_name)
+      @klass.define_status_predicate_method(state_name)
       state
     end
 

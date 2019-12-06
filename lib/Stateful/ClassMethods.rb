@@ -24,17 +24,9 @@ module Stateful
       stateful_states.final_states(*state_names)
     end
 
-    def state(state_name, options = {}, &block)
-      stateful_states.state(state_name, options, &block)
-    end
-
-    def stateful(options = {}, &block)
-      stateful_states.stateful(options, &block)
-    end
-
     # end DSL
 
-    # boolean methods
+    # predicate methods
 
     def final_state?
       !final_states.empty?

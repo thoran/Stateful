@@ -20,7 +20,7 @@ module Stateful
       self.class.final_states
     end
 
-    # boolean methods
+    # predicate methods
 
     def active?
       !final_state?

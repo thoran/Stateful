@@ -22,7 +22,7 @@ module Stateful
         end
       end
 
-      def define_status_boolean_method(state_name)
+      def define_status_predicate_method(state_name)
         stateful_column_name = self.instance_variable_get(:@stateful_column_name)
         define_method("#{state_name}?") do
           self.send(stateful_column_name).name == state_name
