@@ -1,8 +1,10 @@
-Gem::Specification.new do |spec|
-  spec.name = 'stateful.rb' # I would have preferred 'stateful', but there's a gem with the name of stateful.
+require_relative './lib/Stateful/VERSION'
 
-  spec.version = '0.14.8'
-  spec.date = '2019-11-26'
+Gem::Specification.new do |spec|
+  spec.name = 'stateful.rb' # I would have preferred 'stateful', but there's a gem with the name of stateful already.
+
+  spec.version = Stateful::VERSION
+  spec.date = '2019-12-07'
 
   spec.summary = "A Ruby state machine."
   spec.description = "Easily add state and manage it with Poro and ActiveRecord objects."
