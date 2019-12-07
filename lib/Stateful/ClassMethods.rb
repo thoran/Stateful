@@ -12,8 +12,16 @@ module Stateful
 
     # start DSL
 
+    def stateful(options = {}, &block)
+      stateful_states.stateful(options, &block)
+    end
+
     def initial_state(state_name = nil, options = {}, &block)
       stateful_states.initial_state(state_name, options, &block)
+    end
+
+    def state(state_name, options = {}, &block)
+      stateful_states.state(state_name, options, &block)
     end
 
     def final_state(*state_names)
