@@ -5,6 +5,19 @@ module Stateful
   module Poro
     module ClassMethods
 
+      class << self
+
+        def extended(klass)
+          klass.define_stateful_variable_name_setter_method
+          klass.define_stateful_variable_name_getter_method
+          klass.define_next_state_method
+          klass.define_transitions_method
+          klass.define_initial_stateQ_method
+          klass.define_final_stateQ_method
+        end
+
+      end # class << self
+
       def stateful_variable_name=(stateful_variable_name)
         @stateful_variable_name = stateful_variable_name
       end

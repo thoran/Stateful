@@ -5,6 +5,19 @@ module Stateful
   module ActiveRecord
     module ClassMethods
 
+      class << self
+
+        def extended(klass)
+          klass.define_stateful_column_name_setter_method
+          klass.define_stateful_column_name_getter_method
+          klass.define_next_state_method
+          klass.define_transitions_method
+          klass.define_initial_stateQ_method
+          klass.define_final_stateQ_method
+        end
+
+      end # class << self
+
       def stateful_column_name=(stateful_column_name)
         @stateful_column_name = stateful_column_name
       end

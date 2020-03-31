@@ -1,0 +1,8 @@
+20150207, 20200331
+0.14.10
+
+1. I finally implemented a change which I'd had sitting in a file never committed named shouldgetthisworking.rb since 2015-02-07 which entails moving the instance method generation methods from each of the application-specific files (lib/Poro.rb and lib/ActiveRecord.rb) to the application-specific class methods files (lib/Poro/ClassMethods.rb and lib/ActiveRecord/ClassMethods.rb).
+2. + *.gem to .gitignore
+3. ~ lib/VERSION.rb and stateful.rb.gemspec to reflect the updated version
+4. + README.md
+5. + CHANGES.txt
