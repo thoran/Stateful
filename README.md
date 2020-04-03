@@ -12,11 +12,11 @@ gem 'git.rb'
 ```
 And then execute:
 ```shell
-    $ bundle
+$ bundle
 ```
 Or install it yourself as:
 ```shell
-	$ gem install stateful.rb
+$ gem install stateful.rb
 ```
 
 ## Usage
@@ -62,7 +62,7 @@ class PoroMachine
   end
 
   state :next_state do
-    on :yet_another_event => :final_state
+    on :yet_another_event => :final_state1
   end
 
   final_state :final_state0, :final_state1
