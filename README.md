@@ -143,7 +143,7 @@ class ActiveRecordMachine < ActiveRecord::Base
 
   initial_state :initial_state, non_deterministic: true do
     on :an_event => :another_state
-	on :another_event => :yet_another_state
+    on :another_event => :yet_another_state
   end
 
   state :another_state do
